@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bloom · Maternal Wellness AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ======================================================
+       DESIGN TOKENS
+    ====================================================== */
+    :root {
+      --c-ivory:        #FAF8F3;
+      --c-ivory-deep:   #F3EDE0;
+      --c-blush:        #F0C8B8;
+      --c-blush-light:  #FAE8DF;
+      --c-rose:         #CC7A5E;
+      --c-rose-deep:    #A85A42;
+      --c-espresso:     #1A0F0A;
+      --c-brown:        #5A3828;
+      --c-brown-soft:   #876050;
+      --c-sand:         #C8B49A;
+      --c-sage:         #8CAF84;
+      --c-sage-dark:    #527A4C;
+      --c-sage-light:   #C4DCBF;
+      --c-gold:         #C4A460;
+      --c-card:         rgba(255,255,255,0.78);
+      --c-card-border:  rgba(240,200,184,0.30);
+      --shadow-xs:      0 2px 10px rgba(26,15,10,0.06);
+      --shadow-sm:      0 4px 24px rgba(26,15,10,0.08);
+      --shadow-md:      0 10px 44px rgba(26,15,10,0.10);
+      --shadow-lg:      0 24px 72px rgba(26,15,10,0.13);
+      --r-sm:           10px;
+      --r-md:           18px;
+      --r-lg:           26px;
+      --r-xl:           38px;
+      --r-pill:         999px;
+      --ease:           cubic-bezier(0.22,1,0.36,1);
+      --spring:         cubic-bezier(0.34,1.56,0.64,1);
+      --transition:     0.28s var(--ease);
+    }
+
+    /* ======================================================
+       RESET
+    ====================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--c-ivory);
+      color: var(--c-espresso);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    /* subtle grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.028'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+    a   { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* ======================================================
+       UTILITIES
+    ====================================================== */
+    .wrap {
+      max-width: 1100px;
+      margin-inline: auto;
+      padding-inline: clamp(20px, 5vw, 68px);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--c-rose);
+      margin-bottom: 16px;
+    }
+    .eyebrow i {
+      display: block;
+      width: 26px; height: 1.5px;
+      background: var(--c-rose);
+      border-radius: 2px;
+    }
+    h2.display {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+      line-height: 1.14;
+      letter-spacing: -0.015em;
+      color: var(--c-espresso);
+    }
+    h2.display em {
+      font-style: italic;
+      color: var(--c-rose);
+    }
+    .body-copy {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--c-brown);
+      line-height: 1.80;
+    }
+
+    /* scroll-reveal */
+    .sr {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .sr.d1 { transition-delay: 0.08s; }
+    .sr.d2 { transition-delay: 0.16s; }
+    .sr.d3 { transition-delay: 0.24s; }
+    .sr.d4 { transition-delay: 0.32s; }
+    .sr.on { opacity: 1; transform: none; }
+
+    /* ======================================================
+       BUTTONS
+    ====================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 14px 30px;
+      border-radius: var(--r-pill);
+      font-family: 'Jost', sans-serif;
+      font-size: 14.5px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.25s var(--spring), box-shadow 0.25s ease, background 0.22s ease;
+    }
+    .btn svg { flex-shrink: 0; transition: transform 0.22s ease; }
+    .btn:hover svg { transform: translateX(4px); }
+    .btn-solid {
+      background: var(--c-rose);
+      color: #fff;
+      box-shadow: 0 4px 22px rgba(204,122,94,0.34);
+    }
+    .btn-solid:hover {
+      background: var(--c-rose-deep);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 34px rgba(204,122,94,0.38);
+    }
+    .btn-solid:active { transform: scale(0.98); }
+    .btn-outline {
+      background: transparent;
+      color: var(--c-rose);
+      border: 1.5px solid var(--c-blush);
+    }
+    .btn-outline:hover {
+      background: var(--c-blush-light);
+      border-color: var(--c-rose);
+      transform: translateY(-2px);
+    }
+
+    /* email input */
+    .field {
+      flex: 1;
+      min-width: 210px;
+      padding: 14px 22px;
+      border: 1.5px solid rgba(204,122,94,0.28);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,0.88);
+      font-family: 'Jost', sans-serif;
+      font-size: 15px;
+      color: var(--c-espresso);
+      outline: none;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.22s, box-shadow 0.22s;
+    }
+    .field::placeholder { color: rgba(90,56,40,0.40); }
+    .field:focus {
+      border-color: var(--c-rose);
+      box-shadow: 0 0 0 4px rgba(204,122,94,0.12);
+    }
+    .field.err {
+      border-color: #d04444;
+      animation: jolt 0.35s ease;
+    }
+    @keyframes jolt {
+      0%,100% { transform: translateX(0); }
+      30%      { transform: translateX(-5px); }
+      70%      { transform: translateX(5px); }
+    }
+
+    /* ======================================================
+       NAV
+    ====================================================== */
+    #nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(250,248,243,0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(240,200,184,0.20);
+      transition: box-shadow 0.3s ease;
+    }
+    #nav.raised { box-shadow: var(--shadow-sm); }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+    }
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--c-espresso);
+    }
+    .logo span { color: var(--c-rose); font-style: italic; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--c-brown-soft);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--c-espresso); }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .waitlist-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      border-radius: var(--r-pill);
+      background: rgba(140,175,132,0.14);
+      border: 1px solid rgba(140,175,132,0.28);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--c-sage-dark);
+    }
+    .waitlist-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--c-sage-dark);
+      animation: blink 2.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.30; }
+    }
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none; border: none;
+      padding: 5px; cursor: pointer;
+    }
+    .burger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--c-espresso); border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* mobile drawer */
+    .drawer {
+      display: none;
+      position: fixed; inset: 0; z-index: 190;
+      background: rgba(250,248,243,0.97);
+      backdrop-filter: blur(22px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+    }
+    .drawer.open { display: flex; }
+    .drawer a {
+      font-family: 'Fraunces', serif;
+      font-size: 2.3rem;
+      font-weight: 300;
+      color: var(--c-espresso);
+      transition: color 0.2s;
+    }
+    .drawer a:hover { color: var(--c-rose); }
+    .drawer-close {
+      position: absolute; top: 18px; right: 24px;
+      background: none; border: none;
+      font-size: 26px; color: var(--c-brown-soft); cursor: pointer;
+    }
+
+    /* ======================================================
+       HERO
+    ====================================================== */
+    #hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(80px,10vw,148px) 0 clamp(72px,9vw,128px);
+      background: linear-gradient(158deg, var(--c-ivory) 42%, var(--c-blush-light) 100%);
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(88px);
+      pointer-events: none;
+    }
+    .orb-a {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(240,200,184,0.55), transparent 68%);
+      top: -200px; right: -140px;
+    }
+    .orb-b {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(140,175,132,0.28), transparent 70%);
+      bottom: -100px; left: -80px;
+    }
+    .orb-c {
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(196,164,96,0.18), transparent 70%);
+      top: 35%; left: 42%;
+    }
+    .hero-grid {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px 7px 10px;
+      background: rgba(255,255,255,0.66);
+      border: 1px solid rgba(240,200,184,0.44);
+      border-radius: var(--r-pill);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--c-brown);
+      backdrop-filter: blur(8px);
+      margin-bottom: 28px;
+    }
+    .hero-tag .chip {
+      background: var(--c-rose);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 10px;
+      border-radius: var(--r-pill);
+      text-transform: uppercase;
+    }
+    .hero-h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(2.6rem,5vw,4.4rem);
+      line-height: 1.07;
+      letter-spacing: -0.025em;
+      color: var(--c-espresso);
+      margin-bottom: 24px;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--c-rose);
+      position: relative;
+    }
+    .hero-h1 em::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--c-blush), transparent);
+      border-radius: 2px;
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--c-brown);
+      line-height: 1.80;
+      max-width: 46ch;
+      margin-bottom: 38px;
+    }
+    .hero-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+    .hero-social-proof {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatars { display: flex; }
+    .avatars span {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 2.5px solid var(--c-ivory);
+      background: linear-gradient(135deg, #f0c8b8, #e09070);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      margin-left: -9px;
+    }
+    .avatars span:first-child { margin-left: 0; }
+    .proof-text {
+      font-size: 13px;
+      color: var(--c-brown-soft);
+      line-height: 1.42;
+    }
+    .proof-text strong {
+      display: block;
+      font-weight: 500;
+      color: var(--c-espresso);
+    }
+
+    /* hero app mockup */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-end;
+    }
+    .app-shell {
+      background: rgba(255,255,255,0.80);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.88);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-md);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 324px;
+    }
+    .app-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .app-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--c-brown-soft);
+    }
+    .week-tag {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--c-rose);
+      background: var(--c-blush-light);
+      padding: 3px 11px;
+      border-radius: var(--r-pill);
+    }
+    .score-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .score-num {
+      font-family: 'Fraunces', serif;
+      font-size: 4.8rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--c-espresso);
+      letter-spacing: -0.03em;
+    }
+    .score-meta { padding-bottom: 6px; }
+    .score-status {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--c-sage-dark);
+    }
+    .score-label { font-size: 11.5px; color: var(--c-brown-soft); }
+    .bars-row {
+      display: flex;
+      gap: 5px;
+      align-items: flex-end;
+      height: 50px;
+      margin-bottom: 16px;
+    }
+    .bar {
+      flex: 1;
+      min-height: 4px;
+      border-radius: 5px;
+      background: linear-gradient(180deg, var(--c-rose), var(--c-blush));
+      transition: height 0.85s var(--ease);
+    }
+    .bar.hi { background: linear-gradient(180deg, var(--c-rose-deep), var(--c-rose)); }
+    .metrics { display: flex; flex-direction: column; }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-top: 1px solid rgba(240,200,184,0.22);
+      font-size: 13px;
+    }
+    .metric-name { color: var(--c-brown); display: flex; align-items: center; gap: 7px; }
+    .metric-val  { font-weight: 500; color: var(--c-espresso); }
+    .metric-val.g { color: var(--c-sage-dark); }
+    .metric-val.w { color: var(--c-gold); }
+
+    .float-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.95);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-sm);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: fit-content;
+    }
+    .float-card.a { animation: lev 6s ease-in-out infinite; }
+    .float-card.b { animation: lev 6s ease-in-out 3s infinite; align-self: flex-start; }
+    @keyframes lev { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    .fc-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .fc-icon.g { background: rgba(140,175,132,0.20); }
+    .fc-icon.r { background: rgba(240,200,184,0.40); }
+    .fc-lbl {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-brown-soft);
+    }
+    .fc-val {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--c-espresso);
+      line-height: 1;
+    }
+    .fc-val.small {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--c-brown);
+      line-height: 1.45;
+    }
+
+    /* ======================================================
+       MARQUEE TRUST BAR
+    ====================================================== */
+    #trust-bar {
+      background: var(--c-espresso);
+      padding: 16px 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: roll 30s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes roll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 38px;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: rgba(250,248,243,0.52);
+      white-space: nowrap;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .marquee-item .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--c-rose);
+      flex-shrink: 0;
+    }
+
+    /* ======================================================
+       SECTION SPACING
+    ====================================================== */
+    .sec { padding: clamp(80px,9vw,128px) 0; }
+    .sec-intro { max-width: 540px; margin-bottom: 56px; }
+    .sec-intro .body-copy { margin-top: 14px; }
+
+    /* ======================================================
+       PROBLEM
+    ====================================================== */
+    #problem { background: linear-gradient(175deg, var(--c-blush-light) 0%, var(--c-ivory) 65%); }
+    .problem-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.55fr;
+      gap: 68px;
+      align-items: start;
+    }
+    .problem-left { position: sticky; top: 96px; }
+    .blockquote {
+      margin-top: 30px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.60);
+      border-left: 3px solid var(--c-rose);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      backdrop-filter: blur(8px);
+    }
+    .blockquote p {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--c-brown);
+      line-height: 1.62;
+    }
+    .blockquote cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--c-brown-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-style: normal;
+    }
+    .pain-list { display: flex; flex-direction: column; gap: 14px; }
+    .pain-card {
+      background: var(--c-card);
+      border: 1px solid rgba(255,255,255,0.90);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-xs);
+      padding: 24px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      cursor: default;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .pain-card:hover { transform: translateX(7px); box-shadow: var(--shadow-sm); }
+    .pain-icon {
+      width: 44px; height: 44px;
+      border-radius: 13px;
+      background: var(--c-blush-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; flex-shrink: 0;
+    }
+    .pain-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.12rem;
+      font-weight: 400;
+      color: var(--c-espresso);
+      margin-bottom: 6px;
+    }
+    .pain-card p { font-size: 14px; font-weight: 300; color: var(--c-brown); line-height: 1.68; }
+
+    /* ======================================================
+       FEATURES
+    ====================================================== */
+    #features { background: var(--c-ivory); }
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 16px;
+    }
+    .feat-card {
+      background: var(--c-card);
+      border: 1px solid rgba(255,255,255,0.92);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-xs);
+      padding: 28px 22px;
+      cursor: default;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .feat-card:hover { transform: translateY(-7px); box-shadow: var(--shadow-md); }
+    .feat-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px;
+      margin-bottom: 18px;
+    }
+    .fi-rose  { background: linear-gradient(135deg, #FAE8DF, #F0C8B8); }
+    .fi-green { background: linear-gradient(135deg, #DAF0D6, #C4DCBF); }
+    .fi-gold  { background: linear-gradient(135deg, #F5EDD0, #E8D5A0); }
+    .fi-soft  { background: linear-gradient(135deg, #E8DCFA, #D4BCEE); }
+    .feat-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.18rem;
+      font-weight: 400;
+      color: var(--c-espresso);
+      margin-bottom: 9px;
+    }
+    .feat-card p { font-size: 14px; font-weight: 300; color: var(--c-brown); line-height: 1.70; }
+
+    /* ======================================================
+       INSIGHT PREVIEW (dark)
+    ====================================================== */
+    #insight {
+      background: linear-gradient(158deg, #1A0F0A 0%, #28180E 100%);
+      position: relative; overflow: hidden;
+    }
+    .insight-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+    .io-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(204,122,94,0.22), transparent 70%);
+      top: -150px; right: -100px;
+    }
+    .io-2 {
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(140,175,132,0.16), transparent 70%);
+      bottom: -100px; left: -80px;
+    }
+    .insight-grid {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .insight-left .eyebrow { color: var(--c-blush); }
+    .insight-left .eyebrow i { background: var(--c-blush); }
+    .insight-left h2.display { color: #fff; }
+    .insight-left h2.display em { color: var(--c-blush); }
+    .insight-desc {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(250,248,243,0.58);
+      line-height: 1.78;
+      margin-top: 14px; margin-bottom: 38px;
+    }
+    .insight-bullets { display: flex; flex-direction: column; gap: 13px; }
+    .ib {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      font-size: 14.5px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.72);
+      line-height: 1.58;
+    }
+    .ib-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(204,122,94,0.20);
+      border: 1.5px solid rgba(204,122,94,0.44);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .ib-dot::after {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--c-rose);
+    }
+
+    /* The insight UI card */
+    .insight-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--r-xl);
+      backdrop-filter: blur(20px);
+      padding: 30px 28px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.38);
+    }
+    .ic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .ic-title {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(250,248,243,0.45);
+    }
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--c-sage-light);
+      background: rgba(140,175,132,0.14);
+      padding: 3px 11px;
+      border-radius: var(--r-pill);
+    }
+    .live-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--c-sage);
+      animation: blink 2s infinite;
+    }
+    .ic-msg {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--r-md);
+      padding: 18px 18px;
+      margin-bottom: 20px;
+    }
+    .ic-msg-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .ic-msg-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: rgba(204,122,94,0.24);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .ic-msg-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--c-blush);
+      letter-spacing: 0.04em;
+    }
+    .ic-msg-body {
+      font-size: 14.5px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.84);
+      line-height: 1.72;
+    }
+    .ic-bars { display: flex; flex-direction: column; gap: 11px; margin-bottom: 20px; }
+    .ic-bar-row { display: flex; align-items: center; gap: 11px; }
+    .ic-bar-name {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(250,248,243,0.50);
+      min-width: 68px;
+    }
+    .ic-track {
+      flex: 1; height: 5px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px; overflow: hidden;
+    }
+    .ic-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--c-rose), var(--c-blush));
+    }
+    .ic-fill.amber { background: linear-gradient(90deg, #C4A460, #E8D5A0); }
+    .ic-fill.green { background: linear-gradient(90deg, var(--c-sage-dark), var(--c-sage)); }
+    .ic-bar-val {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: rgba(250,248,243,0.60);
+      min-width: 34px;
+      text-align: right;
+    }
+    .ic-suggestion {
+      background: rgba(140,175,132,0.12);
+      border: 1px solid rgba(140,175,132,0.22);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+    .ic-sug-icon { font-size: 17px; margin-top: 1px; }
+    .ic-sug-text {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.78);
+      line-height: 1.60;
+    }
+    .ic-sug-text strong { color: var(--c-sage-light); font-weight: 500; }
+
+    /* ======================================================
+       HOW IT WORKS
+    ====================================================== */
+    #how { background: var(--c-ivory); }
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .steps { display: flex; flex-direction: column; }
+    .step {
+      display: flex;
+      gap: 20px;
+      padding: 26px 0;
+      border-bottom: 1px solid rgba(240,200,184,0.22);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-n {
+      font-family: 'Fraunces', serif;
+      font-size: 3.0rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--c-blush);
+      min-width: 50px;
+      letter-spacing: -0.03em;
+    }
+    .step-body h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.22rem;
+      font-weight: 400;
+      color: var(--c-espresso);
+      margin-bottom: 7px;
+    }
+    .step-body p { font-size: 14px; font-weight: 300; color: var(--c-brown); line-height: 1.70; }
+
+    .phone-mock {
+      background: linear-gradient(148deg, #fff 0%, var(--c-blush-light) 100%);
+      border: 1px solid rgba(240,200,184,0.28);
+      border-radius: 34px;
+      box-shadow: var(--shadow-lg);
+      width: 262px;
+      padding: 32px 22px;
+      margin-inline: auto;
+      position: relative;
+    }
+    .phone-mock::before {
+      content: '';
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 74px; height: 5px;
+      background: var(--c-blush);
+      border-radius: 0 0 5px 5px;
+    }
+    .pm-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--c-brown-soft);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .pm-ring {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .pm-ring-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--c-espresso);
+      margin-top: 8px;
+    }
+    .pm-ring-sub { font-size: 11.5px; color: var(--c-brown-soft); }
+    .pm-stats { display: flex; flex-direction: column; gap: 10px; }
+    .pm-stat {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12.5px;
+      color: var(--c-brown);
+    }
+    .pm-track {
+      flex: 1; height: 5px;
+      background: var(--c-blush-light);
+      border-radius: 4px; overflow: hidden;
+    }
+    .pm-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--c-rose), var(--c-blush));
+    }
+    .pm-fill.green { background: linear-gradient(90deg, var(--c-sage-dark), var(--c-sage)); }
+    .pm-pct {
+      font-size: 12px; font-weight: 500;
+      color: var(--c-rose);
+      min-width: 30px; text-align: right;
+    }
+    .pm-pct.g { color: var(--c-sage-dark); }
+
+    /* ======================================================
+       DIFFERENTIATION SECTION
+    ====================================================== */
+    #diff {
+      background: var(--c-rose);
+      position: relative; overflow: hidden;
+    }
+    .diff-watermark {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Fraunces', serif;
+      font-size: clamp(80px,14vw,190px);
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(255,255,255,0.07);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.04em;
+    }
+    .diff-body {
+      position: relative; z-index: 2;
+      text-align: center;
+      max-width: 740px;
+      margin-inline: auto;
+    }
+    .diff-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 22px;
+    }
+    .diff-eyebrow::before, .diff-eyebrow::after {
+      content: '';
+      width: 26px; height: 1.5px;
+      background: rgba(255,255,255,0.40);
+      border-radius: 2px;
+    }
+    .diff-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem,4.4vw,3.5rem);
+      font-weight: 400;
+      line-height: 1.13;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .diff-h2 em {
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-color: rgba(255,255,255,0.35);
+      text-underline-offset: 7px;
+    }
+    .diff-sub {
+      font-size: 1.02rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.78;
+      max-width: 50ch;
+      margin-inline: auto;
+      margin-bottom: 42px;
+    }
+    .diff-chips {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .diff-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 19px;
+      border: 1.5px solid rgba(255,255,255,0.28);
+      border-radius: var(--r-pill);
+      font-size: 13.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.84);
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(6px);
+      transition: background 0.22s, border-color 0.22s;
+      cursor: default;
+    }
+    .diff-chip::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.65);
+    }
+    .diff-chip:hover {
+      background: rgba(255,255,255,0.17);
+      border-color: rgba(255,255,255,0.50);
+    }
+
+    /* ======================================================
+       TESTIMONIALS
+    ====================================================== */
+    #testimonials { background: linear-gradient(175deg, var(--c-ivory) 0%, var(--c-blush-light) 100%); }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+    .testi-card {
+      background: var(--c-card);
+      border: 1px solid rgba(255,255,255,0.90);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-xs);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      cursor: default;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .testi-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+    .testi-stars { color: var(--c-gold); font-size: 13.5px; letter-spacing: 2px; }
+    .testi-quote {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.03rem;
+      color: var(--c-espresso);
+      line-height: 1.68;
+      flex: 1;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-av {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--c-blush), var(--c-rose));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .testi-name { font-size: 14px; font-weight: 500; color: var(--c-espresso); }
+    .testi-detail { font-size: 12.5px; color: var(--c-brown-soft); }
+
+    /* ======================================================
+       TRUST BADGES
+    ====================================================== */
+    #badges {
+      background: var(--c-ivory);
+      padding: 52px 0;
+      border-top: 1px solid rgba(240,200,184,0.22);
+      border-bottom: 1px solid rgba(240,200,184,0.22);
+    }
+    .badges-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 44px;
+      flex-wrap: wrap;
+    }
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .badge-ico {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      background: var(--c-blush-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px;
+    }
+    .badge-lbl { font-size: 12.5px; font-weight: 500; color: var(--c-brown); }
+    .badge-sub { font-size: 11.5px; color: var(--c-brown-soft); }
+
+    /* ======================================================
+       FINAL CTA
+    ====================================================== */
+    #cta {
+      position: relative; overflow: hidden; text-align: center;
+      background: var(--c-ivory);
+    }
+    .cta-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+    .co-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(240,200,184,0.55), transparent 70%);
+      top: -180px; right: -110px;
+    }
+    .co-2 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(140,175,132,0.28), transparent 70%);
+      bottom: -150px; left: -90px;
+    }
+    .cta-inner {
+      position: relative; z-index: 2;
+      max-width: 660px;
+      margin-inline: auto;
+    }
+    .cta-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.1rem,4.4vw,3.3rem);
+      font-weight: 400;
+      line-height: 1.13;
+      letter-spacing: -0.02em;
+      color: var(--c-espresso);
+      margin-bottom: 16px;
+    }
+    .cta-h2 em { font-style: italic; color: var(--c-rose); }
+    .cta-sub {
+      font-size: 1.03rem;
+      font-weight: 300;
+      color: var(--c-brown);
+      line-height: 1.78;
+      max-width: 44ch;
+      margin-inline: auto;
+      margin-bottom: 42px;
+    }
+    .cta-form {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 520px;
+      margin-inline: auto;
+      margin-bottom: 18px;
+    }
+    .cta-note {
+      font-size: 13px;
+      color: var(--c-brown-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .cta-note span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .cta-note span::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--c-sage);
+    }
+
+    /* ======================================================
+       FOOTER
+    ====================================================== */
+    footer {
+      background: var(--c-espresso);
+      padding: 56px 0 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: rgba(250,248,243,0.88);
+      margin-bottom: 12px;
+    }
+    .footer-logo span { color: var(--c-blush); font-style: italic; }
+    .footer-desc {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.40);
+      line-height: 1.72;
+      max-width: 28ch;
+    }
+    .footer-col-head {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(250,248,243,0.35);
+      margin-bottom: 16px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.50);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--c-blush); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy { font-size: 12.5px; color: rgba(250,248,243,0.25); }
+    .footer-line {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(250,248,243,0.30);
+    }
+
+    /* ======================================================
+       TOAST
+    ====================================================== */
+    #toast {
+      position: fixed;
+      bottom: 30px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--c-espresso);
+      color: rgba(250,248,243,0.90);
+      padding: 13px 26px;
+      border-radius: var(--r-pill);
+      font-size: 14px; font-weight: 400;
+      box-shadow: 0 12px 44px rgba(0,0,0,0.22);
+      z-index: 9998;
+      border: 1px solid rgba(255,255,255,0.09);
+      backdrop-filter: blur(12px);
+      white-space: nowrap;
+      transition: transform 0.44s var(--spring);
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+    @media (max-width: 1024px) {
+      .feat-grid { grid-template-columns: repeat(2,1fr); }
+      .testi-grid { grid-template-columns: repeat(2,1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-brand-col { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      .burger { display: flex; }
+      .nav-links, .nav-right { display: none; }
+      .hero-grid, .problem-layout, .insight-grid, .how-grid { grid-template-columns: 1fr; }
+      .hero-right { align-items: center; }
+      .problem-left { position: static; }
+      .feat-grid, .testi-grid { grid-template-columns: 1fr; }
+      .badges-row { gap: 26px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .hero-form, .cta-form { flex-direction: column; }
+      .field, .btn { width: 100%; justify-content: center; }
+      .float-card { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer" id="drawer">
+  <button class="drawer-close" id="drawerClose">✕</button>
+  <a href="#problem"      onclick="closeDrawer()">The Problem</a>
+  <a href="#features"     onclick="closeDrawer()">Features</a>
+  <a href="#insight"      onclick="closeDrawer()">Daily Insight</a>
+  <a href="#how"          onclick="closeDrawer()">How It Works</a>
+  <a href="#testimonials" onclick="closeDrawer()">Stories</a>
+  <a href="#cta"          onclick="closeDrawer()">Early Access</a>
+</div>
+
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav id="nav">
+  <div class="wrap">
+    <div class="nav-row">
+      <div class="logo">Bloom<span>.</span></div>
+      <ul class="nav-links">
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#insight">Daily Insight</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#testimonials">Stories</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="waitlist-pill">
+          <span class="dot"></span>
+          2,400+ waiting
+        </div>
+        <a href="#cta" class="btn btn-solid" style="padding:10px 22px;font-size:13.5px;">Get Early Access</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <div class="hero-left sr">
+        <div class="hero-tag">
+          <span class="chip">New</span>
+          Maternal Wellness AI · Early Access Now Open
+        </div>
+        <h1 class="hero-h1">
+          Your body is<br/>
+          speaking.<br/>
+          <em>Finally,</em> someone<br/>
+          is listening.
+        </h1>
+        <p class="hero-sub">
+          Bloom gives you daily clarity about what your body is doing during pregnancy and postpartum. Not generic advice. Not another tracker. Real, personalized insight shaped entirely around you.
+        </p>
+        <div class="hero-form">
+          <input class="field" type="email" id="heroEmail" placeholder="Enter your email address" autocomplete="email"/>
+          <button class="btn btn-solid" onclick="submitForm('heroEmail')">
+            Get Early Access
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="hero-social-proof">
+          <div class="avatars">
+            <span>S</span><span>M</span><span>A</span><span>R</span>
+          </div>
+          <div class="proof-text">
+            <strong>2,400+ mothers already on the waitlist</strong>
+            Free during early access
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right sr d2">
+        <div class="app-shell">
+          <div class="app-top">
+            <span class="app-label">Today's Overview</span>
+            <span class="week-tag">Week 26</span>
+          </div>
+          <div class="score-row">
+            <div class="score-num">84</div>
+            <div class="score-meta">
+              <div class="score-status">Feeling Good</div>
+              <div class="score-label">Wellness Score</div>
+            </div>
+          </div>
+          <div class="bars-row" id="heroBars">
+            <div class="bar" style="height:46%"></div>
+            <div class="bar" style="height:64%"></div>
+            <div class="bar" style="height:52%"></div>
+            <div class="bar" style="height:80%"></div>
+            <div class="bar" style="height:72%"></div>
+            <div class="bar" style="height:58%"></div>
+            <div class="bar hi" style="height:84%"></div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><span class="metric-name">😴 Sleep Quality</span><span class="metric-val g">Good</span></div>
+            <div class="metric"><span class="metric-name">💗 Heart Rate</span><span class="metric-val">74 bpm</span></div>
+            <div class="metric"><span class="metric-name">🌿 Stress Level</span><span class="metric-val g">Low</span></div>
+            <div class="metric"><span class="metric-name">💧 Hydration</span><span class="metric-val w">Check in</span></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;width:100%;justify-content:flex-end;flex-wrap:wrap;">
+          <div class="float-card a">
+            <div class="fc-icon g">🌿</div>
+            <div>
+              <div class="fc-lbl">Recovery</div>
+              <div class="fc-val">92%</div>
+            </div>
+          </div>
+          <div class="float-card b">
+            <div class="fc-icon r">🌸</div>
+            <div>
+              <div class="fc-lbl">Today's Focus</div>
+              <div class="fc-val small">Breathe and rest well</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MARQUEE TRUST BAR
+============================================================ -->
+<div id="trust-bar" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot"></span>Designed for modern mothers</span>
+    <span class="marquee-item"><span class="dot"></span>Built with care and responsibility</span>
+    <span class="marquee-item"><span class="dot"></span>Evidence-informed guidance</span>
+    <span class="marquee-item"><span class="dot"></span>Privacy-first by design</span>
+    <span class="marquee-item"><span class="dot"></span>2,400 women already waiting</span>
+    <span class="marquee-item"><span class="dot"></span>Postpartum and pregnancy support</span>
+    <span class="marquee-item"><span class="dot"></span>AI that understands maternal health</span>
+    <span class="marquee-item"><span class="dot"></span>Free during early access</span>
+    <span class="marquee-item"><span class="dot"></span>Designed for modern mothers</span>
+    <span class="marquee-item"><span class="dot"></span>Built with care and responsibility</span>
+    <span class="marquee-item"><span class="dot"></span>Evidence-informed guidance</span>
+    <span class="marquee-item"><span class="dot"></span>Privacy-first by design</span>
+    <span class="marquee-item"><span class="dot"></span>2,400 women already waiting</span>
+    <span class="marquee-item"><span class="dot"></span>Postpartum and pregnancy support</span>
+    <span class="marquee-item"><span class="dot"></span>AI that understands maternal health</span>
+    <span class="marquee-item"><span class="dot"></span>Free during early access</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     PROBLEM
+============================================================ -->
+<section id="problem" class="sec">
+  <div class="wrap">
+    <div class="problem-layout">
+
+      <div class="problem-left sr">
+        <span class="eyebrow"><i></i>The Gap Nobody Talks About</span>
+        <h2 class="display">You deserve more than a symptom checklist.</h2>
+        <p class="body-copy" style="margin-top:14px;">
+          Millions of women navigate pregnancy and postpartum with scattered apps, outdated pamphlets, and advice that was never written with them specifically in mind.
+        </p>
+        <div class="blockquote">
+          <p>"I had five apps open and still had no idea what my body was actually going through."</p>
+          <cite>Sarah, 29 weeks pregnant</cite>
+        </div>
+      </div>
+
+      <div class="pain-list">
+        <div class="pain-card sr">
+          <div class="pain-icon">🧩</div>
+          <div>
+            <h3>Too many apps, no real clarity</h3>
+            <p>Nutrition trackers, symptom logs, meditation timers. Each one is a fragment with no picture on the box. You are not confused because you are not paying attention. You are confused because nobody is connecting the dots for you.</p>
+          </div>
+        </div>
+        <div class="pain-card sr d1">
+          <div class="pain-icon">💭</div>
+          <div>
+            <h3>Your body signals go unexplained</h3>
+            <p>Fatigue, swelling, mood shifts, heart flutters. You notice them. You log them. But without context shaped around your specific pregnancy, these signals stay silent and unsettling. Bloom translates them into something meaningful.</p>
+          </div>
+        </div>
+        <div class="pain-card sr d2">
+          <div class="pain-icon">😶</div>
+          <div>
+            <h3>Stress and exhaustion are invisible</h3>
+            <p>The emotional weight of pregnancy is relentless, yet nearly every health tool ignores it completely. What you feel mentally shapes how you recover physically. Bloom pays attention to both sides of that reality.</p>
+          </div>
+        </div>
+        <div class="pain-card sr d3">
+          <div class="pain-icon">📋</div>
+          <div>
+            <h3>Advice built for everyone fits no one</h3>
+            <p>Generic checklists were written for an average person who does not exist. Your trimester, your history, your stress patterns and your sleep. These specifics matter enormously. Your guidance should reflect every one of them.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURES
+============================================================ -->
+<section id="features" class="sec">
+  <div class="wrap">
+    <div class="sec-intro sr">
+      <span class="eyebrow"><i></i>What Bloom Does</span>
+      <h2 class="display">Everything you need.<br/><em>Beautifully unified.</em></h2>
+      <p class="body-copy">Bloom brings your physical state, emotional health, and recovery patterns into one clear picture. Then it turns that picture into guidance you can actually use each day.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card sr">
+        <div class="feat-icon fi-rose">🌸</div>
+        <h3>Daily Body Insights</h3>
+        <p>Wake up to a clear wellness score and a plain-language summary of what your body did overnight and what it needs from today. No medical degree required to understand it.</p>
+      </div>
+      <div class="feat-card sr d1">
+        <div class="feat-icon fi-green">🌿</div>
+        <h3>Stress and Recovery Tracking</h3>
+        <p>Watch your patterns evolve over time. Bloom monitors your stress signals and recovery arc using gentle, evidence-informed metrics built specifically for pregnancy physiology.</p>
+      </div>
+      <div class="feat-card sr d2">
+        <div class="feat-icon fi-gold">✨</div>
+        <h3>Personalized Guidance</h3>
+        <p>Receive micro-recommendations shaped to your exact state today. A breathing prompt. A hydration reminder. A movement suggestion. Always relevant, never copied from a textbook.</p>
+      </div>
+      <div class="feat-card sr d3">
+        <div class="feat-icon fi-soft">🤍</div>
+        <h3>AI-Powered Companion</h3>
+        <p>Ask anything and receive thoughtful, medically informed responses about your symptoms, your concerns, and what lies ahead in your journey. Calm, clear, and always available to you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DAILY INSIGHT PREVIEW (dark section)
+============================================================ -->
+<section id="insight" class="sec">
+  <div class="insight-orb io-1"></div>
+  <div class="insight-orb io-2"></div>
+  <div class="wrap">
+    <div class="insight-grid">
+
+      <div class="insight-left sr">
+        <span class="eyebrow"><i></i>Daily Insight Preview</span>
+        <h2 class="display">This is what your<br/><em>morning looks like.</em></h2>
+        <p class="insight-desc">
+          Every morning, Bloom reads what happened during the night and the past 48 hours. It notices what changed, connects it to where you are in your pregnancy, and delivers one clear and personal message before your day begins.
+        </p>
+        <div class="insight-bullets">
+          <div class="ib">
+            <div class="ib-dot"></div>
+            Reads your sleep, mood, and stress from the previous 48 hours
+          </div>
+          <div class="ib">
+            <div class="ib-dot"></div>
+            Cross-references your trimester week and logged symptoms
+          </div>
+          <div class="ib">
+            <div class="ib-dot"></div>
+            Delivers a plain-language insight you can act on immediately
+          </div>
+          <div class="ib">
+            <div class="ib-dot"></div>
+            Suggests one or two gentle actions tailored entirely to today
+          </div>
+        </div>
+      </div>
+
+      <div class="sr d2" style="display:flex;justify-content:center;">
+        <div class="insight-card">
+          <div class="ic-header">
+            <span class="ic-title">Today's Insight</span>
+            <span class="live-pill"><span class="dot"></span>Live Preview</span>
+          </div>
+          <div class="ic-msg">
+            <div class="ic-msg-head">
+              <div class="ic-msg-icon">🧠</div>
+              <span class="ic-msg-label">Bloom Insight · Week 26</span>
+            </div>
+            <p class="ic-msg-body">
+              Your body is showing early signs of stress accumulation. Sleep quality has dropped over the past two nights and your resting heart rate is slightly elevated. This is very common at this stage and completely manageable. Prioritizing rest and gentle hydration today will make a real difference.
+            </p>
+          </div>
+          <div class="ic-bars">
+            <div class="ic-bar-row">
+              <span class="ic-bar-name">Sleep</span>
+              <div class="ic-track"><div class="ic-fill amber" style="width:50%"></div></div>
+              <span class="ic-bar-val">50%</span>
+            </div>
+            <div class="ic-bar-row">
+              <span class="ic-bar-name">Stress</span>
+              <div class="ic-track"><div class="ic-fill" style="width:68%"></div></div>
+              <span class="ic-bar-val">Elevated</span>
+            </div>
+            <div class="ic-bar-row">
+              <span class="ic-bar-name">Recovery</span>
+              <div class="ic-track"><div class="ic-fill green" style="width:75%"></div></div>
+              <span class="ic-bar-val">75%</span>
+            </div>
+          </div>
+          <div class="ic-suggestion">
+            <div class="ic-sug-icon">🌿</div>
+            <p class="ic-sug-text">
+              <strong>Suggested for today:</strong> Try 10 minutes of guided breathing before noon. A short rest between 13:00 and 15:00 would meaningfully support your recovery this afternoon.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+============================================================ -->
+<section id="how" class="sec">
+  <div class="wrap">
+    <div class="how-grid">
+      <div>
+        <span class="eyebrow sr"><i></i>How It Works</span>
+        <h2 class="display sr" style="margin-bottom:12px;">Four gentle steps<br/>to daily <em>clarity.</em></h2>
+        <p class="body-copy sr" style="margin-bottom:50px;max-width:44ch;">No long forms. No confusing dashboards. Just a calm two-minute ritual that grows more insightful the longer you use it.</p>
+        <div class="steps">
+          <div class="step sr">
+            <div class="step-n">01</div>
+            <div class="step-body">
+              <h3>Log your daily state</h3>
+              <p>A two-minute morning check-in captures how you slept, how you feel emotionally, and any physical changes you noticed. Honest and simple. No clinical language anywhere.</p>
+            </div>
+          </div>
+          <div class="step sr d1">
+            <div class="step-n">02</div>
+            <div class="step-body">
+              <h3>Receive your insight</h3>
+              <p>Bloom reads your inputs alongside your trimester data and recent patterns, then surfaces a clear and personal summary of what your body is doing right now and why.</p>
+            </div>
+          </div>
+          <div class="step sr d2">
+            <div class="step-n">03</div>
+            <div class="step-body">
+              <h3>Follow your guidance</h3>
+              <p>Receive one or two micro-recommendations shaped to your exact state today. A stretch. A breathing prompt. A reminder to rest. Always matched to your body, never to a textbook average.</p>
+            </div>
+          </div>
+          <div class="step sr d3">
+            <div class="step-n">04</div>
+            <div class="step-body">
+              <h3>Grow over time</h3>
+              <p>Your data deepens with every day. Bloom surfaces long-term trends and adjusts its guidance as your pregnancy evolves, building a complete picture of your maternal health journey.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sr d2">
+        <div class="phone-mock">
+          <div class="pm-label">Your Morning Dashboard</div>
+          <div class="pm-ring">
+            <svg width="116" height="116" viewBox="0 0 116 116">
+              <circle cx="58" cy="58" r="48" fill="none" stroke="#F0C8B8" stroke-width="9"/>
+              <circle cx="58" cy="58" r="48" fill="none" stroke="url(#pmg)" stroke-width="9"
+                stroke-dasharray="301" stroke-dashoffset="48"
+                stroke-linecap="round" transform="rotate(-90 58 58)"/>
+              <defs>
+                <linearGradient id="pmg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#CC7A5E"/>
+                  <stop offset="100%" stop-color="#F0C8B8"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="pm-ring-num">84</div>
+            <div class="pm-ring-sub">Wellness Score</div>
+          </div>
+          <div class="pm-stats">
+            <div class="pm-stat">
+              <span style="min-width:56px;font-size:12px;">Energy</span>
+              <div class="pm-track"><div class="pm-fill" style="width:80%"></div></div>
+              <span class="pm-pct">80%</span>
+            </div>
+            <div class="pm-stat">
+              <span style="min-width:56px;font-size:12px;">Sleep</span>
+              <div class="pm-track"><div class="pm-fill" style="width:72%"></div></div>
+              <span class="pm-pct">72%</span>
+            </div>
+            <div class="pm-stat">
+              <span style="min-width:56px;font-size:12px;">Mood</span>
+              <div class="pm-track"><div class="pm-fill green" style="width:86%"></div></div>
+              <span class="pm-pct g">86%</span>
+            </div>
+            <div class="pm-stat">
+              <span style="min-width:56px;font-size:12px;">Stress</span>
+              <div class="pm-track"><div class="pm-fill green" style="width:26%"></div></div>
+              <span class="pm-pct g">Low</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DIFFERENTIATION
+============================================================ -->
+<section id="diff" class="sec">
+  <div class="diff-watermark">understand</div>
+  <div class="wrap">
+    <div class="diff-body sr">
+      <div class="diff-eyebrow">Our Philosophy</div>
+      <h2 class="diff-h2">
+        We don't just track.<br/>
+        We <em>explain</em> what your<br/>
+        body is telling you.
+      </h2>
+      <p class="diff-sub">
+        Every other app shows you a number. Bloom tells you what it means, why it matters, and what to do with it. Because raw data is not support. Real clarity is.
+      </p>
+      <div class="diff-chips">
+        <span class="diff-chip">Evidence-informed insights</span>
+        <span class="diff-chip">No medical jargon</span>
+        <span class="diff-chip">Compassionate tone</span>
+        <span class="diff-chip">Trimester-aware guidance</span>
+        <span class="diff-chip">Privacy-first design</span>
+        <span class="diff-chip">Built for real life</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================ -->
+<section id="testimonials" class="sec">
+  <div class="wrap">
+    <div class="sec-intro sr">
+      <span class="eyebrow"><i></i>Early Mothers Say</span>
+      <h2 class="display">Words from women who felt<br/><em>finally seen.</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card sr">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"For the first time in my pregnancy I actually understand what my body is going through. Not a chart. Not a summary. A real explanation written just for me."</p>
+        <div class="testi-author">
+          <div class="testi-av">A</div>
+          <div>
+            <div class="testi-name">Amara K.</div>
+            <div class="testi-detail">28 weeks pregnant, first-time mother</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card sr d1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"The daily insight card is the first thing I open every morning. It told me my stress was building before I even felt it myself. That kind of awareness has genuinely changed everything for me."</p>
+        <div class="testi-author">
+          <div class="testi-av">R</div>
+          <div>
+            <div class="testi-name">Riya M.</div>
+            <div class="testi-detail">Postpartum, 6 weeks after birth</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card sr d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"I have tried every wellness app available. This is the only one that feels like it was made for me specifically. The guidance is gentle, deeply personal, and actually useful in my daily life."</p>
+        <div class="testi-author">
+          <div class="testi-av">S</div>
+          <div>
+            <div class="testi-name">Sofia L.</div>
+            <div class="testi-detail">34 weeks pregnant, second pregnancy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRUST BADGES
+============================================================ -->
+<div id="badges">
+  <div class="wrap">
+    <div class="badges-row">
+      <div class="badge-item sr">
+        <div class="badge-ico">🔒</div>
+        <div class="badge-lbl">Privacy First</div>
+        <div class="badge-sub">Your data stays yours</div>
+      </div>
+      <div class="badge-item sr d1">
+        <div class="badge-ico">🧪</div>
+        <div class="badge-lbl">Evidence Informed</div>
+        <div class="badge-sub">Research-backed guidance</div>
+      </div>
+      <div class="badge-item sr d2">
+        <div class="badge-ico">🤝</div>
+        <div class="badge-lbl">Built With Care</div>
+        <div class="badge-sub">Designed for modern mothers</div>
+      </div>
+      <div class="badge-item sr d3">
+        <div class="badge-ico">🌱</div>
+        <div class="badge-lbl">Always Improving</div>
+        <div class="badge-sub">Learns with every week</div>
+      </div>
+      <div class="badge-item sr d4">
+        <div class="badge-ico">💬</div>
+        <div class="badge-lbl">Compassionate AI</div>
+        <div class="badge-sub">Warm, clear, never clinical</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FINAL CTA
+============================================================ -->
+<section id="cta" class="sec">
+  <div class="cta-orb co-1"></div>
+  <div class="cta-orb co-2"></div>
+  <div class="wrap">
+    <div class="cta-inner sr">
+      <span class="eyebrow" style="justify-content:center;"><i></i>Get Early Access to Smarter Maternal Health</span>
+      <h2 class="cta-h2">Your body has a story.<br/>Let Bloom help you <em>understand it.</em></h2>
+      <p class="cta-sub">
+        Join thousands of mothers building a calmer, clearer pregnancy and postpartum journey. Early access is completely free and always will be to start.
+      </p>
+      <div class="cta-form">
+        <input class="field" type="email" id="ctaEmail" placeholder="Your email address" autocomplete="email"/>
+        <button class="btn btn-solid" onclick="submitForm('ctaEmail')">
+          Join the Waitlist
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="cta-note">
+        <span>No spam, ever</span>
+        <span>Unsubscribe anytime</span>
+        <span>Your data stays private</span>
+        <span>Free during early access</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-logo">Bloom<span>.</span></div>
+        <p class="footer-desc">Maternal wellness intelligence for the modern mother. Clarity, compassion, and care every single day of your journey.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Product</div>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#insight">Daily Insight</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#cta">Early Access</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Bloom Health Inc. All rights reserved.</span>
+      <span class="footer-line">Built with love for every mother.</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toast">🌸 You are on the waitlist. We will be in touch soon.</div>
+
+<!-- ============================================================
+     JS
+============================================================ -->
+<script>
+  /* nav shadow */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('raised', scrollY > 20), { passive: true });
+
+  /* mobile drawer */
+  const drawer = document.getElementById('drawer');
+  document.getElementById('burger').addEventListener('click', () => drawer.classList.add('open'));
+  document.getElementById('drawerClose').addEventListener('click', () => drawer.classList.remove('open'));
+  function closeDrawer() { drawer.classList.remove('open'); }
+
+  /* scroll reveal */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.10 });
+  document.querySelectorAll('.sr').forEach(el => obs.observe(el));
+
+  /* animate bars on load */
+  window.addEventListener('load', () => {
+    document.querySelectorAll('#heroBars .bar').forEach((b, i) => {
+      const h = b.style.height;
+      b.style.height = '3px';
+      setTimeout(() => b.style.height = h, 420 + i * 90);
+    });
+  });
+
+  /* toast */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4200);
+  }
+
+  /* email submit */
+  function submitForm(id) {
+    const input = document.getElementById(id);
+    const val   = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      input.classList.add('err');
+      setTimeout(() => input.classList.remove('err'), 1800);
+      input.focus();
+      return;
+    }
+    console.log('Waitlist signup:', val);
+    input.value = '';
+    showToast('🌸 You are on the waitlist. We will be in touch soon.');
+  }
+
+  document.getElementById('heroEmail').addEventListener('keydown', e => { if (e.key === 'Enter') submitForm('heroEmail'); });
+  document.getElementById('ctaEmail').addEventListener('keydown',  e => { if (e.key === 'Enter') submitForm('ctaEmail'); });
+</script>
+</body>
+</html>
