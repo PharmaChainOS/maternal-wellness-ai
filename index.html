@@ -1358,19 +1358,6 @@
   </style>
 </head>
 <body>
-  <h2>Daily Check-In</h2>
-
-<input id="sleep" type="number" placeholder="Sleep hours (e.g. 6)"><br><br>
-
-<input id="stress" type="number" placeholder="Stress level (1-5)"><br><br>
-
-<input id="mood" type="number" placeholder="Mood (1-5)"><br><br>
-
-<input id="fatigue" type="number" placeholder="Fatigue (1-5)"><br><br>
-
-<button onclick="saveData()">Get Insight</button>
-
-<p id="insightBox"></p>
 
 <!-- MOBILE DRAWER -->
 <div class="drawer" id="drawer">
@@ -2041,19 +2028,15 @@
     const mood = document.getElementById("mood").value;
     const fatigue = document.getElementById("fatigue").value;
 
-    try {
-      await addDoc(collection(db, "dailyInputs"), {
-        sleep: Number(sleep),
-        stress: Number(stress),
-        mood: Number(mood),
-        fatigue: Number(fatigue),
-        createdAt: new Date()
-      });
+    await addDoc(collection(db, "dailyInputs"), {
+      sleep: Number(sleep),
+      stress: Number(stress),
+      mood: Number(mood),
+      fatigue: Number(fatigue),
+      createdAt: new Date()
+    });
 
-      alert("Data saved!");
-    } catch (error) {
-      console.error(error);
-    }
+    alert("Data saved!");
   }
 
   window.saveData = saveData;
