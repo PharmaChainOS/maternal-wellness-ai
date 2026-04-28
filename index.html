@@ -2006,6 +2006,44 @@
 
   document.getElementById('heroEmail').addEventListener('keydown', e => { if (e.key === 'Enter') submitForm('heroEmail'); });
   document.getElementById('ctaEmail').addEventListener('keydown',  e => { if (e.key === 'Enter') submitForm('ctaEmail'); });
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAlzl97aZNjXOiSDOVWxz_VRnmgD7og7OQ",
+    authDomain: "bloom-2a5bc.firebaseapp.com",
+    projectId: "bloom-2a5bc",
+    storageBucket: "bloom-2a5bc.firebasestorage.app",
+    messagingSenderId: "198159090635",
+    appId: "1:198159090635:web:814a25e3791cea22c66c4e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function saveData() {
+    const sleep = document.getElementById("sleep").value;
+    const stress = document.getElementById("stress").value;
+    const mood = document.getElementById("mood").value;
+    const fatigue = document.getElementById("fatigue").value;
+
+    try {
+      await addDoc(collection(db, "dailyInputs"), {
+        sleep: Number(sleep),
+        stress: Number(stress),
+        mood: Number(mood),
+        fatigue: Number(fatigue),
+        createdAt: new Date()
+      });
+
+      alert("Data saved!");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  window.saveData = saveData;
 </script>
 </body>
 </html>
